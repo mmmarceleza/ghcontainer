@@ -96,7 +96,7 @@ jobs:
           export FILE_GH_VERSION=$(mktemp)
           docker run --rm ${{ env.container_name }} --version | paste -s > $FILE_GH_VERSION
           echo $FILE_GH_VERSION
-          if [ $(awk '{print $3}' $FILE_GH_VERSION) = ${{ env.gh_version }} ]; then echo "A versão do container está correta: ${{ env.gh_version }}"; fi
+          if [ $(awk '{print $3}' $FILE_GH_VERSION) = ${{ env.gh_version }} ]; then echo "GitHub CLI container version is right: ${{ env.gh_version }}"; fi
 
   #----------------------------------------------------
   #            job 04 - Image Scan with Trivy
@@ -161,8 +161,8 @@ jobs:
       #---------------------step 05-05-----------------
       - name: Tag and push image to Docker Hub
         run: |
-          docker tag ${{ env.container_name }}:latest ${{ secrets.DOCKERHUB_ORGANIZATION }}/${{ env.container_name }}:${{ env.gh_version }}
-          docker push ${{ secrets.DOCKERHUB_ORGANIZATION }}/${{ env.container_name }}:${{ env.gh_version }}
+          docker tag ${{ env.container_name }}:latest ${{ secrets.DOCKERHUB_ORGANIZATION }}/${{ env.container_name }}:${{ github.event.release.tag_name }}
+          docker push ${{ secrets.DOCKERHUB_ORGANIZATION }}/${{ env.container_name }}:${{ github.event.release.tag_name }}
       #---------------------step 05-06-----------------
       - name: Digest
-        run: echo "GitHub CLI container version is -> ${{ env.gh_version }}"
+        run: echo "GitHub CLI image version is -> ${{ env.gh_version }}"
