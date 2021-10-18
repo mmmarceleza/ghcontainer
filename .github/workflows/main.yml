@@ -91,15 +91,15 @@ jobs:
         run: |
           docker load --input /tmp/${{ env.container_name }}.tar
       #---------------------step 03-04-----------------
-      - name: Teste
+      - name: Test the container version
         run: |
           # Create an env with the path to a temporary file
           export FILE_GH_VERSION=$(mktemp)
           # Run the new container to get Its version and save in the temporary file
           docker run --rm ${{ env.container_name }} --version | paste -s > $FILE_GH_VERSION
           echo $FILE_GH_VERSION
-          # Test if the version is equivalent to the variable "gh_version" in this CI file
-          if [ $(awk '{print $3}' $FILE_GH_VERSION) = {{ env.gh_version }} ]; then echo "A versão do container está correta"; fi
+          # Test if the version is equivalent to the variable gh_version in this CI file
+          if [ $(awk '{print $3}' $FILE_GH_VERSION) = {{ env.gh_version }} ]; then echo "A versão do container está correta: ${{ env.gh_version }}"; fi
 
   #----------------------------------------------------
   #            job 04 - Image Scan with Trivy
@@ -126,7 +126,7 @@ jobs:
       - name: Image Scan with Trivy
         uses: aquasecurity/trivy-action@master
         with:
-          image-ref: "gh-image"
+          image-ref: ${{ env.container_name }}
           format: "table"
           exit-code: "1"
           ignore-unfixed: true
