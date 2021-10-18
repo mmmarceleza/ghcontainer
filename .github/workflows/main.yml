@@ -96,7 +96,7 @@ jobs:
           export FILE_GH_VERSION=$(mktemp)
           docker run --rm ${{ env.container_name }} --version | paste -s > $FILE_GH_VERSION
           echo $FILE_GH_VERSION
-          if [ $(awk '{print $3}' $FILE_GH_VERSION) = {{ env.gh_version }} ]; then echo "A versão do container está correta: ${{ env.gh_version }}"; fi
+          if [ $(awk '{print $3}' $FILE_GH_VERSION) = ${{ env.gh_version }} ]; then echo "A versão do container está correta: ${{ env.gh_version }}"; fi
 
   #----------------------------------------------------
   #            job 04 - Image Scan with Trivy
