@@ -93,12 +93,9 @@ jobs:
       #---------------------step 03-04-----------------
       - name: Test the container version
         run: |
-          # Create an env with the path to a temporary file
           export FILE_GH_VERSION=$(mktemp)
-          # Run the new container to get Its version and save in the temporary file
           docker run --rm ${{ env.container_name }} --version | paste -s > $FILE_GH_VERSION
           echo $FILE_GH_VERSION
-          # Test if the version is equivalent to the variable gh_version in this CI file
           if [ $(awk '{print $3}' $FILE_GH_VERSION) = {{ env.gh_version }} ]; then echo "A versão do container está correta: ${{ env.gh_version }}"; fi
 
   #----------------------------------------------------
