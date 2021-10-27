@@ -1,4 +1,4 @@
-FROM docker.io/library/ubuntu:20.04
+FROM docker.io/summerwind/actions-runner:v2.283.3-ubuntu-18.04-b01e193
 
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
